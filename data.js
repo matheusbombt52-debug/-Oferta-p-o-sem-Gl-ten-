@@ -1,15 +1,15 @@
 /* ===== CONFIGURAÇÃO CENTRAL: edite aqui produtos, URLs, códigos, ofertas e conteúdo ===== */
 window.CONFIG={
-  demo:false, // false = login real via Supabase (preencha CONFIG.supabase abaixo). true = login simulado, só para testes locais.
+  demo:true, // MODO VISUALIZAÇÃO (ligado): qualquer e-mail e senha entram, o login é só simulado no navegador. Antes de vender, preencha CONFIG.supabase abaixo e volte para false.
   supabase:{url:"",anonKey:""}, // preencha com os dados do SEU projeto; nunca use a service_role aqui
-  /* hash = SHA-256 do código de acesso (nunca o código em texto). Em demonstração, todos usam o código de teste "demo".
+  /* hash = SHA-256 do código de acesso (nunca o código em texto). Cada produto tem o seu próprio código (só o hash fica aqui).
      ATENÇÃO: validação no navegador NÃO é proteção real. Para proteção real, valide no servidor (README). */
   modules:[
     {id:"main",title:"50 Receitas de Pães Sem Glúten",emoji:"",free:true},
-    {id:"pizzas",title:"50 Pizzas Sem Glúten",desc:"Massas e coberturas para pizzas sem glúten.",emoji:"🍕",cover:"img/pizzas.jpg",hash:"2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea",buyUrl:"",enabled:true},
-    {id:"bolos",title:"50 Bolos Sem Glúten",desc:"Bolos simples e de festa, sem glúten.",emoji:"🍰",cover:"img/bolos.jpg",hash:"2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea",buyUrl:"",enabled:true},
-    {id:"salgados",title:"50 Salgados e Lanches Sem Glúten",desc:"Salgados e lanches práticos para o dia a dia.",emoji:"🥟",cover:"img/salgados.jpg",hash:"2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea",buyUrl:"",enabled:true},
-    {id:"guia",title:"Guia Prático: Onde Tem Glúten?",desc:"Identifique fontes de glúten, leia rótulos e evite a contaminação cruzada.",emoji:"🔍",cover:"img/gluten.jpg",guide:"gluten",hash:"2a97516c354b68848cdbd8f54a226a0a55b21ed138e207ad6c5cbb9c00aa5aea",buyUrl:"",enabled:true}
+    {id:"pizzas",title:"50 Pizzas Sem Glúten",desc:"Massas e coberturas para pizzas sem glúten.",emoji:"🍕",cover:"img/pizzas.jpg",hash:"5524fe000ffd5c1743a619d7e17581511ed083d674b9998c6c7b42024315e88a",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/3bv9qF7v4hmqqU1KDLMzXs",enabled:true},
+    {id:"bolos",title:"50 Bolos Sem Glúten",desc:"Bolos simples e de festa, sem glúten.",emoji:"🍰",cover:"img/bolos.jpg",hash:"845548b9529063b54598f77d3d8b332d66e2537cf0228d934802120a777bad8a",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/llMoZddBExjqefE0r8uIJq",enabled:true},
+    {id:"salgados",title:"50 Salgados e Lanches Sem Glúten",desc:"Salgados e lanches práticos para o dia a dia.",emoji:"🥟",cover:"img/salgados.jpg",hash:"270651be075a58532f43c18d19b581b8178ff42670fe9146add1821a7332aa4e",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/CdbKe8VStcTL7bPhIMam08",enabled:true},
+    {id:"guia",title:"Guia Prático: Onde Tem Glúten?",desc:"Identifique fontes de glúten, leia rótulos e evite a contaminação cruzada.",emoji:"🔍",cover:"img/gluten.jpg",guide:"gluten",hash:"0ab847ee0dd9fd88e9689ce1c32f2ebaaa969d3710ba1fd81246899ec37e268b",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/ZNaF1t43FsX279dTR8h6qZ",enabled:true}
   ],
   offers:[ // price/fullPrice: número (ex.: 29.9) ou null. url: link de compra ou "". available: true/false
     {id:"whats",title:"Receber os materiais pelo WhatsApp",desc:"Descrição a definir.",price:null,url:"",available:false},
@@ -26,37 +26,19 @@ const mk=(m,list)=>list.map(([name,cat,emoji,ings,kw],x)=>({id:m+(x+1),name,cat,
 window.DATA={
 recipes:{
  main:(window.PAES||[]),
- pizzas:mk("pizzas",[
+ pizzas:(window.PIZZAS&&window.PIZZAS.length)?window.PIZZAS:mk("pizzas",[
   ["Massa de pizza de arroz","Massas","🍕","farinha de arroz, polvilho, azeite, fermento, sal","base"],
   ["Pizza de calabresa","Salgadas","🌶️","massa sem glúten, molho de tomate, mussarela, calabresa, cebola","calabresa"],
   ["Pizza doce de banana","Doces","🍌","massa sem glúten, banana, canela, açúcar","sobremesa"]]),
- bolos:mk("bolos",[
+ bolos:(window.BOLOS&&window.BOLOS.length)?window.BOLOS:mk("bolos",[
   ["Bolo de cenoura","Bolos simples","🥕","cenoura, ovos, óleo, açúcar, farinha sem glúten, fermento","cobertura"],
   ["Bolo de fubá","Bolos simples","🌽","fubá, leite, ovos, açúcar, óleo, fermento","café"],
   ["Bolo de chocolate","Bolos de festa","🍫","chocolate em pó, ovos, açúcar, farinha sem glúten, leite","aniversário"]]),
- salgados:mk("salgados",[
+ salgados:(window.SALGADOS&&window.SALGADOS.length)?window.SALGADOS:mk("salgados",[
   ["Coxinha de mandioca","Salgados","🍗","mandioca cozida, frango desfiado, cebola, temperos","festa"],
   ["Empada de palmito","Salgados","🥧","massa sem glúten, palmito, cebola, azeite","lanche"],
   ["Sanduíche natural","Lanches","🥪","pão sem glúten, peito de frango, cenoura, requeijão","prático"]])
 },
-bonus:[
- {id:"farinhas",t:"Guia de Farinhas e Substituições",e:"🌾",demo:true,secs:[
-  {h:"Como usar este guia",p:["Conteúdo demonstrativo: o material definitivo será inserido pelo editorial."]},
-  {h:"Farinhas e amidos",l:["Farinha de arroz","Polvilho doce e azedo","Fécula de batata","Farinha de grão-de-bico"]},
-  {h:"Tabela de substituições",p:["Espaço reservado para a tabela definitiva."]}]},
- {id:"sos",t:"SOS Pão Sem Glúten: Como Evitar Erros Comuns",e:"🆘",demo:true,secs:[
-  {h:"Problemas frequentes",l:["Pão que não cresce","Miolo úmido ou pesado","Casca muito dura","Pão que racha"]},
-  {h:"Soluções",p:["Espaço reservado para o diagnóstico e as soluções definitivas."]}]},
- {id:"conserva",t:"Guia de Conservação e Congelamento",e:"❄️",demo:true,secs:[
-  {h:"Temas do guia",l:["Conservar em temperatura ambiente","Armazenar na geladeira","Congelar e descongelar","Reaquecer"]},
-  {h:"Orientações",p:["Espaço reservado para as orientações definitivas."]}]}
-],
-guides:[
- {id:"gluten",t:"Guia Prático: Onde Tem Glúten?",e:"🔍",secs:[
-  {h:"O que é glúten",p:["Glúten é um conjunto de proteínas presente no trigo, no centeio e na cevada, e em seus derivados. A aveia pode conter traços por contaminação durante o cultivo ou o processamento."]},
-  {h:"Onde costuma aparecer",l:["Pães, massas, bolos e biscoitos tradicionais","Cerveja e outras bebidas com malte","Empanados, farinha de rosca e salgados","Molhos prontos, caldos, temperos e embutidos","Sopas instantâneas e produtos de preparo rápido"]},
-  {h:"Lendo rótulos",l:["Procure a frase CONTÉM GLÚTEN ou NÃO CONTÉM GLÚTEN: a legislação brasileira exige essa informação nos alimentos industrializados.","Observe ingredientes como trigo, centeio, cevada, malte e extrato de malte.","Confira o rótulo a cada compra: as receitas dos fabricantes podem mudar."]},
-  {h:"Contaminação cruzada em casa",l:["Use utensílios, tábuas e peneiras bem lavados ou exclusivos.","Evite compartilhar manteiga, geleias e pastas usadas com talheres que tocaram pão comum.","Cuidado com óleo de fritura e fornos usados para alimentos com glúten."]},
-  {h:"Aviso importante",p:["Este guia traz informações gerais e não substitui a orientação de médico ou nutricionista. Quem tem doença celíaca ou sensibilidade ao glúten deve seguir o acompanhamento profissional."]}]}
-]
+bonus:(window.BONUS||[]).map(b=>({...b,cover:({farinhas:"img/bonus-farinhas.jpg",sos:"img/bonus-sos.jpg",conserva:"img/bonus-conserva.jpg"})[b.id],alt:({farinhas:"Sacos e tigelas com grãos e farinhas",sos:"Pão com símbolo de proibido",conserva:"Pães fatiados embalados em sacos plásticos"})[b.id]})), // 3 bônus incluídos na oferta principal: content/bonus.js
+guides:(window.GUIAS||[]) // produtos adicionais (order bump), nunca listados como bônus: content/guia.js
 };

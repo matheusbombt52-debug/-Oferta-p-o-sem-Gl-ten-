@@ -20,7 +20,7 @@ Enquanto `CONFIG.supabase` estiver vazio em `data.js`, a tela de entrada mostra 
 2. Em Authentication > URL Configuration, informe como **Site URL** o endereço do seu GitHub Pages (e o mesmo em Redirect URLs). Sem isso, os links dos e-mails não voltam para o app.
 3. Em Authentication > Providers > Email, decida se a confirmação de e-mail fica ligada. Ligada: o cliente recebe o link e o app avisa para conferir o e-mail. Desligada: a conta entra direto.
 4. Em Authentication > Email Templates, traduza os e-mails para português e ajuste o remetente (SMTP próprio é recomendado para produção; o envio padrão do Supabase tem limite baixo).
-5. `demo:false` deve permanecer assim em produção. `demo:true` só serve para testar o visual localmente, com login simulado.
+5. `demo:false` deve ficar assim em produção (clientes reais). `demo:true` libera a navegação para visualização: qualquer e-mail e senha entram, com login simulado. Atualmente está `true` para você ver o site hospedado; volte para `false` depois de configurar o Supabase.
 
 ## Limite conhecido
 Os códigos dos produtos exclusivos são validados no navegador (hash SHA-256) e podem ser contornados por quem abrir o código-fonte. Para proteção real, veja "Proteção real" abaixo.

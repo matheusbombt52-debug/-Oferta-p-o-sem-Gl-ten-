@@ -50,3 +50,37 @@ ul.g{padding-left:20px}ul.g li{margin:4px 0}
 .okmsg{color:var(--olive);font-weight:700;margin:4px 0}.okmsg:empty{display:none}.auth h2{margin-top:.25rem}.auth>p.mut{margin:0 0 8px}.error:empty{min-height:0;margin:0}
 .lib{display:block;background:#fff;border-radius:18px;box-shadow:0 2px 10px rgba(62,37,24,.12);overflow:hidden;text-decoration:none;color:inherit;margin:16px 0}.libimg{display:block;width:100%;height:auto}.libb{padding:16px 16px 18px}.libb h2{margin:0 0 6px;font-size:1.35rem}.libb p{margin:0 0 10px;color:var(--mut)}.libb .btn{margin-top:14px}
 .cat{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border-radius:16px;box-shadow:0 2px 8px rgba(62,37,24,.08);padding:14px;margin:10px 0;text-decoration:none;color:inherit;min-height:64px}.cat b{display:block}.cat span{white-space:nowrap;font-size:.85rem}
+.tw{margin:10px 0 16px}.tw table{width:100%;border-collapse:collapse;font-size:.92rem}.tw th{background:#EBCFA8;text-align:left;padding:8px 10px}.tw td{padding:8px 10px;border-bottom:1px solid #E8D9BF;vertical-align:top}
+@media(max-width:640px){.tw thead{display:none}.tw tr{display:block;background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(62,37,24,.08);padding:6px 12px;margin:10px 0}.tw td{display:block;border:0;padding:5px 0}.tw td::before{content:attr(data-l);display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mut)}.tw td:first-child{font-weight:700}.tw td:first-child::before{display:none}}
+
+/* ---- Produtos exclusivos: cards profissionais ---- */
+.xc{padding:12px;gap:14px;transition:transform .15s,box-shadow .15s}.xc:active{transform:scale(.99)}
+.xc .rb{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.xc .rb b{font-size:1.02rem;line-height:1.25}
+.xd{color:var(--mut);font-size:.8rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.chev{color:var(--mut);font-size:1.6rem;line-height:1;flex:none;padding-right:2px}
+.tag svg{width:13px;height:13px;vertical-align:-2px;margin-right:5px}
+.cvw{position:relative;flex:none;width:84px;height:84px;border-radius:14px;overflow:hidden;display:block;background:#EBDDCB}
+.cvw .cv,.cvw .cvb{width:100%;height:100%;object-fit:cover;display:block;border-radius:0;margin:0;transition:filter .3s}
+.cvw.big{width:100%;height:auto;aspect-ratio:16/9;margin-bottom:12px}.cvw.big .cvb{height:100%}
+.is-lk .cv,.is-lk .cvb{filter:grayscale(1) contrast(1.05) brightness(.78)}
+.lkb{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(36,22,14,.22),rgba(36,22,14,.52))}
+.lkb svg{width:34px;height:34px;padding:8px;box-sizing:border-box;border-radius:50%;background:rgba(255,255,255,.94);color:var(--brown);box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.cvw.big .lkb svg{width:52px;height:52px;padding:13px}
+.tag.cta{background:var(--terra);color:#fff}
+
+/* ---- Oferta de compra ---- */
+.promo{margin:14px 0 4px;padding:16px;border-radius:16px;background:linear-gradient(160deg,#FFF7E8,#FBE9CC);border:1.5px solid #F0D3A4;text-align:center}
+.promo-h{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.pct{background:var(--terra);color:#fff;font:800 .85rem Nunito,sans-serif;letter-spacing:.03em;padding:4px 12px;border-radius:99px}
+.promo-t{color:var(--terra-d);font:800 .8rem Nunito,sans-serif;text-transform:uppercase;letter-spacing:.06em}
+.promo-p{display:flex;align-items:baseline;justify-content:center;gap:10px}
+.promo-p s{color:var(--mut);font-size:1rem}.promo-p b{font:700 2.1rem/1.1 Fraunces,Georgia,serif;color:var(--terra-d)}
+.promo-s{margin:2px 0 12px;color:var(--olive);font-weight:800;font-size:.9rem}
+.btn.buy{min-height:54px;font-size:1.05rem;box-shadow:0 6px 16px rgba(194,85,47,.35)}
+.promo-n{margin:10px 0 0;color:var(--mut);font-size:.8rem;line-height:1.4}
+.orx{display:flex;align-items:center;gap:10px;margin:16px 0 2px;color:var(--mut);font-size:.8rem;font-weight:700}
+.orx:before,.orx:after{content:"";flex:1;height:1px;background:var(--line)}
+.dchip{position:absolute;top:6px;left:6px;z-index:2;display:inline-block;min-height:0;width:auto;height:auto;border:0;background:var(--terra);color:#fff;font:800 .68rem/1.25 Nunito,sans-serif;letter-spacing:.02em;padding:2px 7px;border-radius:99px;box-shadow:0 2px 6px rgba(0,0,0,.3);pointer-events:none}
+.promo{margin-top:8px}.btn.buy{white-space:nowrap}
+.tile .tn{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;margin-bottom:8px}

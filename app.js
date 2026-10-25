@@ -32,7 +32,13 @@ const AV='<details class="aviso"><summary><b>Importante:</b> aviso sobre glúten
 const back=(h,t="Voltar")=>`<a href="${h}" class="top">← ${t}</a>`;
 const rcard=(m,r)=>`<a class="rc" href="#/r/${m}/${r.id}"><div class="th num" aria-hidden="true">${r.num?String(r.num).padStart(2,"0"):"·"}</div><div class="rb"><b>${esc(r.name)}</b><small>${esc(r.cat)}${favs().includes(m+":"+r.id)?" · favorita":""}</small></div></a>`;
 const mth=m=>m.cover?`<img class="cv" src="${esc(m.cover)}" alt="Capa: ${esc(m.title)}" loading="lazy">`:`<div class="th" style="background:#F3E3C9">${m.emoji}</div>`;
+const ICL='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',ICK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l3 3"/></svg>',ICU='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 7.5-1.9"/></svg>';
+const lkb=ok=>ok?"":`<span class="lkb">${ICL}</span>`;
+const xcard=m=>{const ok=unl().includes(m.id);return `<a class="rc xc${ok?"":" is-lk"}" href="#/exclusivos/${m.id}"><span class="cvw">${mth(m)}${lkb(ok)}${!ok&&pct(m)?`<span class="dchip">-${pct(m)}%</span>`:""}</span><div class="rb"><b>${esc(m.title)}</b><small class="xd">${esc(m.desc||"")}</small><span class="tag ${ok?"ok":"cta"}">${ok?ICU+"Desbloqueado":ICK+"Toque para liberar"}</span></div><span class="chev" aria-hidden="true">›</span></a>`};
 const lockBtn=m=>m.buyUrl?`<a class="btn" href="${esc(m.buyUrl)}" target="_blank" rel="noopener">Quero desbloquear</a>`:`<button class="btn off" disabled>Compra disponível em breve</button>`;
+const pct=m=>m.price&&m.fullPrice&&m.fullPrice>m.price?Math.round((1-m.price/m.fullPrice)*100):0;
+const ICC='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M3 4h2.5l2.2 10.2a1.5 1.5 0 0 0 1.5 1.2h8.2a1.5 1.5 0 0 0 1.5-1.1L20.5 8H6.2"/></svg>';
+const buyBox=m=>{if(!m.buyUrl)return lockBtn(m);const p=pct(m);if(!p)return lockBtn(m);return `<p class="orx"><span>Ainda não tem o código?</span></p><div class="promo"><div class="promo-h"><span class="pct">${p}% OFF</span><span class="promo-t">Oferta especial</span></div><div class="promo-p"><s>${brl(m.fullPrice)}</s><b>${brl(m.price)}</b></div><p class="promo-s">Você economiza ${brl(m.fullPrice-m.price)}</p><a class="btn buy" href="${esc(m.buyUrl)}" target="_blank" rel="noopener">${ICC}Comprar com ${p}% OFF</a><p class="promo-n">Depois da compra, use o código de acesso recebido para liberar este conteúdo aqui.</p></div>`};
 
 /* ---------- Autenticação ---------- */
 const AT={login:{h:"Entrar",p:"Digite seu e-mail e sua senha para entrar.",b:"Entrar"},signup:{h:"Criar conta",p:"Crie sua conta para acessar suas receitas.",b:"Criar minha conta"},reset:{h:"Recuperar senha",p:"Informe seu e-mail e enviaremos um link para você criar uma nova senha.",b:"Enviar link"},newpw:{h:"Nova senha",p:"Escolha uma nova senha para a sua conta.",b:"Salvar nova senha"}};
@@ -76,8 +82,8 @@ function home(){
  page(`<img class="bn" src="img/banner.jpg" alt="Sabores em Casa">
  <div class="top" style="margin-top:12px"><h1 style="margin:0">Olá, ${esc(first)}!</h1><a href="#/conta" aria-label="Minha conta" style="font-size:1.6rem;text-decoration:none">👤</a></div>
 <a class="lib" href="#/receitas"><img class="libimg" src="img/paes-capa.jpg" alt="Pães sem glúten feitos em casa"><div class="libb"><h2>50 Receitas de Pães Sem Glúten</h2><p>Descubra receitas para diferentes momentos do dia.</p>${recs("main").filter(r=>!r.demo).length==50?'<span class="tag ok">50 receitas disponíveis</span>':""}<span class="btn">Explorar receitas</span></div></a>
-  <h2>Meus bônus incluídos</h2><div class="grid2">${D.bonus.map(b=>`<a class="tile" href="#/bonus/${b.id}"><i>${b.e}</i>${esc(b.t)}</a>`).join("")}</div>
- <h2>Produtos exclusivos</h2>${C.modules.filter(m=>!m.free).map(m=>`<a class="rc" href="#/exclusivos/${m.id}">${mth(m)}<div class="rb"><b>${esc(m.title)}</b><span class="tag ${unl().includes(m.id)?"ok":"lock"}">${unl().includes(m.id)?"Desbloqueado":"🔒 Bloqueado"}</span></div></a>`).join("")}
+  <h2>Meus bônus incluídos</h2><div class="grid2">${D.bonus.map(b=>`<a class="tile" href="#/bonus/${b.id}">${b.cover?`<img class="tn" src="${esc(b.cover)}" alt="${esc(b.alt||"")}" loading="lazy">`:`<i>${b.e}</i>`}${esc(b.t)}</a>`).join("")}</div>
+ <h2>Produtos exclusivos</h2>${C.modules.filter(m=>!m.free).map(xcard).join("")}
  <a class="btn sec" href="#/ofertas" style="margin-top:12px">Ver ofertas adicionais</a>`,"home",()=>{S={q:"",cat:"Todas"}})}
 
 /* ---------- Biblioteca (busca + filtros reais) ---------- */
@@ -88,7 +94,7 @@ function modView(id){
  if(!recs(id).some(r=>!r.demo))return page(`${back("#/exclusivos","Produtos exclusivos")}<h1>${esc(m.title)}</h1><div class="card"><p>As receitas desta coleção estão sendo preparadas e serão liberadas aqui em breve.</p></div>`,"excl");
  const cats=["Todas",...new Set(recs(id).map(r=>r.cat))];
  page(`${back(id=="main"?"#/":"#/exclusivos")}<h1>${esc(m.title)}</h1>${AV}
- <input type="search" id="q" placeholder="Buscar por nome, ingrediente ou palavra-chave" aria-label="Buscar" value="${esc(S.q)}">
+ <input type="search" id="q" placeholder="Buscar por receita ou ingrediente" aria-label="Buscar" value="${esc(S.q)}">
  <div class="chips">${cats.map(c=>`<button class="chip ${S.cat==c?"on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("")}</div><div id="list"></div>`,id=="main"?"rec":"excl",()=>{
   const upd=()=>{const q=norm(S.q.trim()),out=recs(id).filter(r=>(S.cat=="Todas"||r.cat==S.cat)&&(!q||norm([r.name,r.keywords,r.ingredients.map(i=>i[0]).join(" ")].join(" ")).includes(q)));
    $("#list").innerHTML=out.length?out.map(r=>rcard(id,r)).join(""):`<div class="empty"><p>Nenhuma receita encontrada${S.q?` para “${esc(S.q)}”`:""}.</p><button class="btn sec sm" id="clr">Limpar pesquisa e filtros</button></div>`;
@@ -99,6 +105,7 @@ function modView(id){
 const slugf=c=>norm(c).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 const CD={"Pães rápidos":"Massas simples, prontas em pouco tempo","Pães para o dia a dia":"Para o café da manhã e as refeições","Pães para sanduíches":"Fatias e pães macios para recheios","Pães de frigideira":"Sem forno, direto na frigideira","Pães de liquidificador":"Massas batidas, sem sova","Pães doces":"Para o lanche e o café da tarde","Pães com sementes":"Com sementes e mais textura","Pães recheados":"Com recheios doces e salgados","Pães especiais":"Para ocasiões e mesas especiais"};
 function libView(){
+ if(lastM!="main"){S={q:"",cat:"Todas"};lastM="main"}
  const all=recs("main"),cats=[...new Set(all.map(r=>r.cat))],fv=favs().filter(x=>x.startsWith("main:")).map(x=>all.find(r=>"main:"+r.id==x)).filter(Boolean);
  page(`${back("#/","Início")}<h1>50 Receitas de Pães Sem Glúten</h1><p class="mut">Escolha uma categoria ou busque pelo nome da receita ou por um ingrediente que você tem em casa.</p>${AV}
  <input type="search" id="q" placeholder="Buscar por receita ou ingrediente" aria-label="Buscar por receita ou ingrediente" value="${esc(S.q)}"><div id="list"></div>`,"rec",()=>{
@@ -119,7 +126,7 @@ function recipe(mid,rid){
  const fk=mid+":"+rid,ck=uk("chk:"+fk);let step=0;
  const draw=()=>{const fv=favs().includes(fk),ch=st.get(ck,[]);
   page(`${back(mid=="main"?"#/receitas/c/"+slugf(r.cat):"#/m/"+mid,mid=="main"?"Voltar para "+esc(r.cat):"Voltar à biblioteca")}
-  <h1>${r.num?String(r.num).padStart(2,"0")+". ":""}${esc(r.name)}</h1>${r.desc?`<p>${esc(r.desc)}</p>`:""}<p class="mut">${[r.yield&&"Rendimento: "+r.yield,r.prep&&"Preparo: "+r.prep+" min",r.bake?"Forno: "+r.bake+" min"+(r.temp?" a "+r.temp:""):r.temp&&"Frigideira: "+r.temp].filter(Boolean).map(esc).join("<br>")}</p>
+  <h1>${r.num?String(r.num).padStart(2,"0")+". ":""}${esc(r.name)}</h1>${r.desc?`<p>${esc(r.desc)}</p>`:""}<p class="mut">${[r.yield&&"Rendimento: "+r.yield,r.prep&&"Preparo: "+r.prep+" min",r.cook&&"Cozimento: "+r.cook,r.bake?"Forno: "+r.bake+" min"+(r.temp?" a "+r.temp:""):r.temp&&"Frigideira: "+r.temp].filter(Boolean).map(esc).join("<br>")}</p>
   <button class="btn ${fv?"":"sec"}" id="fav" aria-pressed="${fv}">${fv?"Salvo nos favoritos":"Salvar nos favoritos"}</button>
   <h2>Ingredientes</h2><p class="mut"><small>Confira no rótulo a declaração sobre glúten de cada produto industrializado e evite a contaminação cruzada.</small></p>${r.ingredients.map((i,x)=>`<label class="ing ${ch.includes(x)?"done":""}"><input type="checkbox" data-i="${x}" ${ch.includes(x)?"checked":""}><span>${esc(i[0])}<br><small>${esc(i[1])}</small></span></label>`).join("")}
   <h2>Modo de preparo</h2><p class="mut">Etapa ${step+1} de ${r.steps.length}</p><div class="step">${esc(r.steps[step])}</div>
@@ -130,21 +137,21 @@ function recipe(mid,rid){
    $("#pv").onclick=()=>{step--;const y=scrollY;draw();scrollTo(0,y)};$("#nx").onclick=()=>{step++;const y=scrollY;draw();scrollTo(0,y)}})};draw()}
 
 /* ---------- Bônus ---------- */
-const bonusList=()=>page(`<h1>Meus bônus</h1><p class="mut">Materiais incluídos no seu acesso.</p>${D.bonus.map(b=>`<a class="rc" href="#/bonus/${b.id}"><div class="th" style="background:#F3E3C9">${b.e}</div><div class="rb"><b>${esc(b.t)}</b><span class="tag ${b.demo?"":"ok"}">${b.demo?"Em breve":"Incluído"}</span></div></a>`).join("")}`,"bonus");
+const bonusList=()=>page(`${back("#/","Início")}<h1>Meus bônus</h1><p class="mut">Materiais incluídos no seu acesso.</p>${D.bonus.map(b=>`<a class="rc" href="#/bonus/${b.id}">${b.cover?`<span class="cvw"><img class="cv" src="${esc(b.cover)}" alt="${esc(b.alt||"")}" loading="lazy"></span>`:`<div class="th" style="background:#F3E3C9">${b.e}</div>`}<div class="rb"><b>${esc(b.t)}</b><span class="tag ${b.demo?"":"ok"}">${b.demo?"Em breve":"Incluído"}</span></div></a>`).join("")}`,"bonus");
 function bonusView(id,bk="#/bonus"){const b=(bk=="#/bonus"?D.bonus:D.guides).find(x=>x.id==id);if(!b)return bonusList();
- page(`${back(bk,bk=="#/bonus"?"Meus bônus":"Produtos exclusivos")}<h1>${b.e} ${esc(b.t)}</h1>${AV}
- ${b.demo?'<div class="card"><p>Este material está sendo finalizado e será liberado em breve.</p></div>':b.secs.map(s=>`<h2>${esc(s.h)}</h2>${(s.p||[]).map(p=>`<p>${esc(p)}</p>`).join("")}${s.l?`<ul class="g">${s.l.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>`:""}`).join("")}`,bk=="#/bonus"?"bonus":"excl")}
+ page(`${back(bk,bk=="#/bonus"?"Meus bônus":"Produtos exclusivos")}<h1>${esc(b.t)}</h1>${b.cover?`<div class="cvw big"><img class="cvb" src="${esc(b.cover)}" alt="${esc(b.alt||"")}"></div>`:""}${AV}
+ ${b.demo?'<div class="card"><p>Este material está sendo finalizado e será liberado em breve.</p></div>':b.secs.map(s=>`<h2>${esc(s.h)}</h2>${(s.p||[]).map(p=>`<p>${esc(p)}</p>`).join("")}${s.l?`<ul class="g">${s.l.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>`:""}${s.t?`<div class="tw"><table><thead><tr>${s.t.h.map(x=>`<th>${esc(x)}</th>`).join("")}</tr></thead><tbody>${s.t.r.map(r=>`<tr>${r.map((c,k)=>`<td data-l="${esc(s.t.h[k])}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:""}`).join("")}`,bk=="#/bonus"?"bonus":"excl")}
 
 /* ---------- Exclusivos ---------- */
 function excl(id){
  const m=getM(id);
- if(!m||m.free)return page(`<h1>Produtos exclusivos</h1><p class="mut">Toque em um produto para ver os detalhes e desbloquear.</p>
- ${C.modules.filter(x=>!x.free).map(x=>{const ok=unl().includes(x.id);return `<a class="rc" href="#/exclusivos/${x.id}">${mth(x)}<div class="rb"><b>${esc(x.title)}</b><span class="tag ${ok?"ok":"lock"}">${ok?"Desbloqueado":"🔒 Bloqueado"}</span></div></a>`}).join("")}
+ if(!m||m.free)return page(`${back("#/","Início")}<h1>Produtos exclusivos</h1><p class="mut">Toque em um produto e digite o seu código para liberar o acesso.</p>
+ ${C.modules.filter(x=>!x.free).map(xcard).join("")}
  <a class="btn sec" href="#/ofertas" style="margin-top:12px">Ver ofertas adicionais</a>`,"excl");
  const ok=unl().includes(id);
- page(`${back("#/exclusivos","Produtos exclusivos")}<div class="card">${m.cover?`<img class="cvb" src="${esc(m.cover)}" alt="Capa: ${esc(m.title)}">`:""}
-  <h2 style="margin-top:0">${m.emoji} ${esc(m.title)}</h2><span class="tag ${ok?"ok":"lock"}">${ok?"Desbloqueado":"🔒 Conteúdo exclusivo"}</span><p>${esc(m.desc)}</p>
-  ${ok?`<a class="btn olive" href="#/m/${m.id}">${m.guide?"Abrir guia":"Abrir receitas"}</a>`:`${lockBtn(m)}<form class="uf" style="margin-top:10px" novalidate><label>Já tenho o código<input type="password" name="c" autocomplete="off" placeholder="Código de acesso"></label><p class="error" role="alert"></p><button class="btn sec">Desbloquear</button></form>`}</div>`,"excl",()=>{
+ page(`${back("#/exclusivos","Produtos exclusivos")}<div class="card">${m.cover?`<div class="cvw big${ok?"":" is-lk"}"><img class="cvb" src="${esc(m.cover)}" alt="Capa: ${esc(m.title)}">${lkb(ok)}</div>`:""}
+  <h2 style="margin-top:0">${esc(m.title)}</h2><span class="tag ${ok?"ok":"cta"}">${ok?ICU+"Desbloqueado":ICK+"Digite seu código para liberar"}</span><p>${esc(m.desc)}</p>
+  ${ok?`<a class="btn olive" href="#/m/${m.id}">${m.guide?"Abrir guia":"Abrir receitas"}</a>`:`<form class="uf" style="margin-top:10px" novalidate><label>Digite o código de acesso<input type="password" name="c" autocomplete="off" placeholder="Código de acesso"></label><p class="error" role="alert"></p><button class="btn sec">Liberar acesso</button></form>${buyBox(m)}`}</div>`,"excl",()=>{
   const f=$(".uf");if(!f)return;
   f.onsubmit=async e=>{e.preventDefault();const c=f.c.value.trim(),er=f.querySelector(".error");
    if(!c)return er.textContent="Digite o código de acesso.";
@@ -153,14 +160,14 @@ function excl(id){
    st.set(uk("unl"),[...unl(),m.id]);toast("Produto desbloqueado!");excl(id)}})}
 
 /* ---------- Ofertas ---------- */
-const offers=()=>page(`${back("#/exclusivos")}<h1>Ofertas adicionais</h1><p class="mut">Estas ofertas são separadas dos 4 bônus incluídos.</p>
+const offers=()=>page(`${back("#/exclusivos")}<h1>Ofertas adicionais</h1><p class="mut">Estas ofertas são separadas dos 3 bônus incluídos.</p>
  ${C.offers.filter(o=>o.available&&o.url).length?C.offers.filter(o=>o.available&&o.url).map(o=>{const ok=o.available&&o.url;return `<div class="card"><h3>${esc(o.title)}</h3><p>${esc(o.desc)}</p>
   ${o.includes?`<p><b>Inclui:</b></p><ul class="g">${o.includes.map(i=>`<li>${esc(getM(i)?.title||i)}</li>`).join("")}</ul>`:""}
   <p class="price">${typeof o.price=="number"?(typeof o.fullPrice=="number"&&o.fullPrice>o.price?`<small><s>${brl(o.fullPrice)}</s></small> `:"")+brl(o.price):""}</p>
   ${ok?`<a class="btn" href="${esc(o.url)}" target="_blank" rel="noopener">Quero esta oferta</a>`:`<button class="btn off" disabled>${o.available?"Link a configurar":"Indisponível no momento"}</button>`}</div>`}).join(""):'<div class="empty"><p>Não há ofertas adicionais disponíveis no momento.</p></div>'}`,"excl");
 
 /* ---------- Conta ---------- */
-const account=()=>{const u=user();page(`<h1>Minha conta</h1><div class="card"><small>E-mail</small><p><b>${esc(u.email)}</b></p></div>
+const account=()=>{const u=user();page(`${back("#/","Início")}<h1>Minha conta</h1><div class="card"><small>E-mail</small><p><b>${esc(u.email)}</b></p></div>
  <h2>Configurações</h2><div class="card"><p class="mut">Os dados abaixo ficam apenas neste aparelho.</p>
  <button class="btn sec" id="cf">Limpar minhas favoritas</button><br><br><button class="btn sec" id="cu">Remover acessos liberados</button></div>
  <button class="btn" id="out" style="margin-top:12px">Sair da conta</button>`,"conta",()=>{
