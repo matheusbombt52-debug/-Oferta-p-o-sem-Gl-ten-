@@ -1,15 +1,16 @@
 /* ===== CONFIGURAÇÃO CENTRAL: edite aqui produtos, URLs, códigos, ofertas e conteúdo ===== */
 window.CONFIG={
+  promoSeconds:480, // segundos de uso até aparecer o card de oferta (uma única vez por pessoa, neste aparelho)
   demo:true, // MODO VISUALIZAÇÃO (ligado): qualquer e-mail e senha entram, o login é só simulado no navegador. Antes de vender, preencha CONFIG.supabase abaixo e volte para false.
   supabase:{url:"",anonKey:""}, // preencha com os dados do SEU projeto; nunca use a service_role aqui
   /* hash = SHA-256 do código de acesso (nunca o código em texto). Cada produto tem o seu próprio código (só o hash fica aqui).
      ATENÇÃO: validação no navegador NÃO é proteção real. Para proteção real, valide no servidor (README). */
   modules:[
     {id:"main",title:"50 Receitas de Pães Sem Glúten",emoji:"",free:true},
-    {id:"pizzas",title:"50 Pizzas Sem Glúten",desc:"Massas e coberturas para pizzas sem glúten.",emoji:"🍕",cover:"img/pizzas.jpg",hash:"5524fe000ffd5c1743a619d7e17581511ed083d674b9998c6c7b42024315e88a",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/3bv9qF7v4hmqqU1KDLMzXs",enabled:true},
-    {id:"bolos",title:"50 Bolos Sem Glúten",desc:"Bolos simples e de festa, sem glúten.",emoji:"🍰",cover:"img/bolos.jpg",hash:"845548b9529063b54598f77d3d8b332d66e2537cf0228d934802120a777bad8a",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/llMoZddBExjqefE0r8uIJq",enabled:true},
-    {id:"salgados",title:"50 Salgados e Lanches Sem Glúten",desc:"Salgados e lanches práticos para o dia a dia.",emoji:"🥟",cover:"img/salgados.jpg",hash:"270651be075a58532f43c18d19b581b8178ff42670fe9146add1821a7332aa4e",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/CdbKe8VStcTL7bPhIMam08",enabled:true},
-    {id:"guia",title:"Guia Prático: Onde Tem Glúten?",desc:"Identifique fontes de glúten, leia rótulos e evite a contaminação cruzada.",emoji:"🔍",cover:"img/gluten.jpg",guide:"gluten",hash:"0ab847ee0dd9fd88e9689ce1c32f2ebaaa969d3710ba1fd81246899ec37e268b",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/ZNaF1t43FsX279dTR8h6qZ",enabled:true}
+    {id:"pizzas",banner:"img/banner-pizzas.jpg",title:"50 Pizzas Sem Glúten",desc:"Massas e coberturas para pizzas sem glúten.",emoji:"🍕",cover:"img/pizzas.jpg",hash:"5524fe000ffd5c1743a619d7e17581511ed083d674b9998c6c7b42024315e88a",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/3bv9qF7v4hmqqU1KDLMzXs",enabled:true},
+    {id:"bolos",banner:"img/banner-bolos.jpg",title:"50 Bolos Sem Glúten",desc:"Bolos simples e de festa, sem glúten.",emoji:"🍰",cover:"img/bolos.jpg",hash:"845548b9529063b54598f77d3d8b332d66e2537cf0228d934802120a777bad8a",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/llMoZddBExjqefE0r8uIJq",enabled:true},
+    {id:"salgados",banner:"img/banner-salgados.jpg",title:"50 Salgados e Lanches Sem Glúten",desc:"Salgados e lanches práticos para o dia a dia.",emoji:"🥟",cover:"img/salgados.jpg",hash:"270651be075a58532f43c18d19b581b8178ff42670fe9146add1821a7332aa4e",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/CdbKe8VStcTL7bPhIMam08",enabled:true},
+    {id:"guia",banner:"img/banner-guia.jpg",title:"Guia Prático: Onde Tem Glúten?",desc:"Identifique fontes de glúten, leia rótulos e evite a contaminação cruzada.",emoji:"🔍",cover:"img/gluten.jpg",guide:"gluten",hash:"0ab847ee0dd9fd88e9689ce1c32f2ebaaa969d3710ba1fd81246899ec37e268b",price:5.9,fullPrice:7.9,buyUrl:"https://ggcheckout.app/checkout/v5/ZNaF1t43FsX279dTR8h6qZ",enabled:true}
   ],
   offers:[ // price/fullPrice: número (ex.: 29.9) ou null. url: link de compra ou "". available: true/false
     {id:"whats",title:"Receber os materiais pelo WhatsApp",desc:"Descrição a definir.",price:null,url:"",available:false},

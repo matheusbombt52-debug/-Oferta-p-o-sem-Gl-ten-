@@ -77,14 +77,38 @@ async function fromLink(){const h=new URLSearchParams(location.hash.slice(1));hi
  st.set("sc_user",{email:(r.j.email||"").toLowerCase(),name:r.j.user_metadata?.name||"",at:t,rt:h.get("refresh_token")||"",exp:Math.floor(Date.now()/1000)+(+h.get("expires_in")||3600)});toast("E-mail confirmado com sucesso.");route()}
 
 /* ---------- Início ---------- */
+const done=()=>st.get(uk("done"),[]);
+function prog(){const ex=C.modules.filter(m=>!m.free),u=unl(),nb=D.bonus.filter(b=>!b.demo).length,total=1+nb+ex.length,got=1+nb+ex.filter(m=>u.includes(m.id)).length,acc=k=>k.startsWith("main:")||u.includes(k.split(":")[0]),dn=done().filter(acc).length,avail=recs("main").filter(r=>!r.demo).length+ex.filter(m=>u.includes(m.id)).reduce((s,m)=>s+recs(m.id).filter(r=>!r.demo).length,0);return{total,got,pct:Math.round(got/total*100),dn,avail,next:ex.find(m=>!u.includes(m.id)),nex:ex.length,gex:ex.filter(m=>u.includes(m.id)).length}}
+const MD={primeira:"img/medalha-primeira.png",cinco:"img/medalha-cinco.png",dez:"img/medalha-dez.png",colecao:"img/medalha-colecao.png"};
+const bnr=()=>{const L=C.modules.filter(m=>!m.free&&m.banner&&!unl().includes(m.id));if(!L.length)return"";return `<section class="car" aria-label="Ofertas dos produtos exclusivos"><div class="car-t" id="car">${L.map((m,i)=>`<a class="car-s" href="#/exclusivos/${m.id}"><img src="${esc(m.banner)}" alt="${esc(m.title)}, de ${brl(m.fullPrice)} por ${brl(m.price)} (${pct(m)}% de desconto)"${i?' loading="lazy"':""}></a>`).join("")}</div>${L.length>1?`<div class="car-d">${L.map((m,i)=>`<i class="${i?"":"on"}"></i>`).join("")}</div>`:""}</section>`};
+function carInit(){const car=$("#car");if(!car)return;const ds=[...document.querySelectorAll(".car-d i")],n=car.children.length;let idx=0,hold=0;
+ car.addEventListener("scroll",()=>{idx=Math.round(car.scrollLeft/car.clientWidth);ds.forEach((d,i)=>d.classList.toggle("on",i==idx))},{passive:true});
+ ["touchstart","mousedown","focusin"].forEach(e=>car.addEventListener(e,()=>{hold=Date.now()+8000}));car.addEventListener("mouseenter",()=>{hold=Infinity});car.addEventListener("mouseleave",()=>{hold=Date.now()+2000});
+ ds.forEach((d,i)=>d.onclick=()=>{hold=Date.now()+8000;car.scrollTo({left:i*car.clientWidth,behavior:"smooth"})});
+ if(n>1&&!matchMedia("(prefers-reduced-motion: reduce)").matches){const t=setInterval(()=>{if(!document.body.contains(car))return clearInterval(t);if(document.hidden||Date.now()<hold)return;idx=(idx+1)%n;car.scrollTo({left:idx*car.clientWidth,behavior:"smooth"})},5000)}}
+/* ---------- Card de oferta: aparece uma única vez, após ~8 min de uso ---------- */
+function promoCard(force){if($("#promo"))return;const ex=C.modules.filter(m=>!m.free&&!unl().includes(m.id));if(!ex.length||!user())return;const k=uk("promo");if(!force){if(st.get(k,{}).shown)return;st.set(k,{t:C.promoSeconds||480,shown:1})}
+ const el=document.createElement("div");el.id="promo";el.setAttribute("role","dialog");el.setAttribute("aria-label","Oferta especial");
+ el.innerHTML=`<button class="px" aria-label="Fechar">×</button><p class="pk">Oferta especial</p><h3>Aproveite o desconto!</h3><p class="ps">Você ainda não liberou ${ex.length==1?"este produto":"estes produtos"}:</p>${ex.map(m=>`<a class="pi" href="#/exclusivos/${m.id}"><span>${esc(m.title)}</span><b>${pct(m)?pct(m)+"% OFF":"Ver"}</b></a>`).join("")}<button class="pn" type="button">Agora não</button>`;
+ document.body.appendChild(el);const close=()=>el.remove();el.querySelector(".px").onclick=close;el.querySelector(".pn").onclick=close;el.querySelectorAll("a.pi").forEach(x=>x.addEventListener("click",close))}
+let pt=null;function promoTick(){if(!user()||document.hidden)return;const k=uk("promo"),s=st.get(k,{t:0,shown:0});if(s.shown)return;if(!pt||pt.k!=k)pt={k,t:s.t||0};pt.t++;if(pt.t%5==0)st.set(k,{t:pt.t,shown:0});if(pt.t>=(C.promoSeconds||480))promoCard(false)}
+setInterval(promoTick,1000);
 function home(){
- const u=user(),first=(u.name||u.email.split("@")[0]).split(" ")[0],f=favs().filter(x=>x.startsWith("main:")).map(x=>recs("main").find(r=>"main:"+r.id==x)).filter(Boolean);
- page(`<img class="bn" src="img/banner.jpg" alt="Sabores em Casa">
- <div class="top" style="margin-top:12px"><h1 style="margin:0">Olá, ${esc(first)}!</h1><a href="#/conta" aria-label="Minha conta" style="font-size:1.6rem;text-decoration:none">👤</a></div>
-<a class="lib" href="#/receitas"><img class="libimg" src="img/paes-capa.jpg" alt="Pães sem glúten feitos em casa"><div class="libb"><h2>50 Receitas de Pães Sem Glúten</h2><p>Descubra receitas para diferentes momentos do dia.</p>${recs("main").filter(r=>!r.demo).length==50?'<span class="tag ok">50 receitas disponíveis</span>':""}<span class="btn">Explorar receitas</span></div></a>
-  <h2>Meus bônus incluídos</h2><div class="grid2">${D.bonus.map(b=>`<a class="tile" href="#/bonus/${b.id}">${b.cover?`<img class="tn" src="${esc(b.cover)}" alt="${esc(b.alt||"")}" loading="lazy">`:`<i>${b.e}</i>`}${esc(b.t)}</a>`).join("")}</div>
+ const u=user(),nm=(u.name||u.email.split("@")[0]).split(" ")[0],first=nm.charAt(0).toUpperCase()+nm.slice(1),P=prog(),last=st.get(uk("last"),null),lr=last&&(last.m=="main"||unl().includes(last.m))?recs(last.m).find(r=>r.id==last.id):null,
+ bd=[["Primeira receita feita",P.dn>=1,MD.primeira],["5 receitas feitas",P.dn>=5,MD.cinco],["10 receitas feitas",P.dn>=10,MD.dez],["Coleção completa",!P.next,MD.colecao]],rp=P.avail?Math.round(P.dn/P.avail*100):0;
+ page(`<div class="top2"><img class="lgs" src="img/logo.png" alt="Sabores em Casa"><a class="av" href="#/conta" aria-label="Minha conta">${esc(first.charAt(0))}</a></div>
+ <section class="hero"><div><p class="hero-k">Bem-vindo de volta</p><h1>Olá, ${esc(first)}!</h1><p class="hero-s">${P.next?`Sua coleção está em ${P.pct}%. Faltam ${P.total-P.got} ${P.total-P.got==1?"material":"materiais"} para completar.`:"Parabéns! Você liberou toda a coleção."}</p></div><div class="ring" data-p="${P.pct}" style="--p:0"><b>${P.pct}%</b></div></section>
+ ${lr?`<a class="cont" href="#/r/${last.m}/${lr.id}"><span><small>Continue de onde parou</small><b>${esc(lr.name)}</b></span><span class="chev" aria-hidden="true">›</span></a>`:""}
+ ${bnr()}
+ <section class="card jc"><div class="jh"><img src="img/jornada.jpg" alt="Mãos sovando massa sobre a bancada com farinha"><div class="jht"><h2>Sua jornada</h2><small>Acompanhe o seu avanço</small></div></div><div class="jb">
+  <div class="pl"><span>Materiais liberados</span><b>${P.got} de ${P.total}</b></div><div class="pb"><i data-w="${P.pct}"></i></div>
+  <div class="pl"><span>Receitas feitas</span><b>${P.dn} de ${P.avail}</b></div><div class="pb"><i data-w="${rp}"></i></div>
+  ${P.next&&!bnr()?`<a class="nxt" href="#/exclusivos/${P.next.id}"><span><small>Próximo desbloqueio</small><b>${esc(P.next.title)}</b></span><span class="nxo">${pct(P.next)?pct(P.next)+"% OFF":"Ver"}</span></a>`:""}
+  <h3 class="bh">Conquistas</h3><div class="bds">${bd.map(([t,on,p])=>`<div class="bd${on?" on":""}"><img src="${p}" alt="" width="68" height="68" loading="lazy"><small>${t}</small></div>`).join("")}</div></div></section>
+ <a class="lib" href="#/receitas"><img class="libimg" src="img/paes-capa.jpg" alt="Pães sem glúten feitos em casa"><div class="libb"><h2>50 Receitas de Pães Sem Glúten</h2><p>Descubra receitas para diferentes momentos do dia.</p>${recs("main").filter(r=>!r.demo).length==50?'<span class="tag ok">50 receitas disponíveis</span>':""}<span class="btn">Explorar receitas</span></div></a>
+ <h2>Meus bônus incluídos</h2><div class="grid2">${D.bonus.map(b=>`<a class="tile" href="#/bonus/${b.id}">${b.cover?`<img class="tn" src="${esc(b.cover)}" alt="${esc(b.alt||"")}" loading="lazy">`:`<i>${b.e}</i>`}${esc(b.t)}</a>`).join("")}</div>
  <h2>Produtos exclusivos</h2>${C.modules.filter(m=>!m.free).map(xcard).join("")}
- <a class="btn sec" href="#/ofertas" style="margin-top:12px">Ver ofertas adicionais</a>`,"home",()=>{S={q:"",cat:"Todas"}})}
+ <a class="btn sec" href="#/ofertas" style="margin-top:12px">Ver ofertas adicionais</a>`,"home",()=>{S={q:"",cat:"Todas"};carInit();requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll(".pb i").forEach(e=>e.style.width=e.dataset.w+"%");document.querySelectorAll(".ring").forEach(e=>e.style.setProperty("--p",e.dataset.p))}))})}
 
 /* ---------- Biblioteca (busca + filtros reais) ---------- */
 let S={q:"",cat:"Todas"},lastM="";
@@ -123,16 +147,17 @@ function catView(slug){
 /* ---------- Receita ---------- */
 function recipe(mid,rid){
  const r=recs(mid).find(x=>x.id==rid);if(!r)return page(`<div class="empty"><p>Receita não encontrada.</p><a class="btn" href="#/receitas">Voltar à biblioteca</a></div>`,"rec");
- const fk=mid+":"+rid,ck=uk("chk:"+fk);let step=0;
- const draw=()=>{const fv=favs().includes(fk),ch=st.get(ck,[]);
+ const fk=mid+":"+rid,ck=uk("chk:"+fk);let step=0;st.set(uk("last"),{m:mid,id:rid});
+ const draw=()=>{const fv=favs().includes(fk),dn=done().includes(fk),ch=st.get(ck,[]);
   page(`${back(mid=="main"?"#/receitas/c/"+slugf(r.cat):"#/m/"+mid,mid=="main"?"Voltar para "+esc(r.cat):"Voltar à biblioteca")}
   <h1>${r.num?String(r.num).padStart(2,"0")+". ":""}${esc(r.name)}</h1>${r.desc?`<p>${esc(r.desc)}</p>`:""}<p class="mut">${[r.yield&&"Rendimento: "+r.yield,r.prep&&"Preparo: "+r.prep+" min",r.cook&&"Cozimento: "+r.cook,r.bake?"Forno: "+r.bake+" min"+(r.temp?" a "+r.temp:""):r.temp&&"Frigideira: "+r.temp].filter(Boolean).map(esc).join("<br>")}</p>
   <button class="btn ${fv?"":"sec"}" id="fav" aria-pressed="${fv}">${fv?"Salvo nos favoritos":"Salvar nos favoritos"}</button>
+   <button class="btn ${dn?"olive":"sec"}" id="dn" aria-pressed="${dn}" style="margin-top:8px">${dn?"Receita feita":"Marcar como feita"}</button>
   <h2>Ingredientes</h2><p class="mut"><small>Confira no rótulo a declaração sobre glúten de cada produto industrializado e evite a contaminação cruzada.</small></p>${r.ingredients.map((i,x)=>`<label class="ing ${ch.includes(x)?"done":""}"><input type="checkbox" data-i="${x}" ${ch.includes(x)?"checked":""}><span>${esc(i[0])}<br><small>${esc(i[1])}</small></span></label>`).join("")}
   <h2>Modo de preparo</h2><p class="mut">Etapa ${step+1} de ${r.steps.length}</p><div class="step">${esc(r.steps[step])}</div>
   <div class="row"><button class="btn sec" id="pv" ${step?"":"disabled"}>Anterior</button><button class="btn olive" id="nx" ${step<r.steps.length-1?"":"disabled"}>Próxima</button></div>
   ${r.tips?`<h2>Dicas</h2><ul class="g">${r.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}${r.storage?`<h2>Conservação</h2><p>${esc(r.storage)}</p>`:""}${r.notes?`<h2>Observações</h2><p>${esc(r.notes)}</p>`:""}${AV}`,mid=="main"?"rec":"excl",()=>{
-   $("#fav").onclick=()=>{const l=favs();st.set(uk("fav"),fv?l.filter(x=>x!=fk):[...l,fk]);const y=scrollY;draw();scrollTo(0,y)};
+   $("#dn").onclick=()=>{const l=done();st.set(uk("done"),dn?l.filter(x=>x!=fk):[...l,fk]);if(!dn){const n=prog().dn,T={1:"Primeira receita feita",5:"5 receitas feitas",10:"10 receitas feitas"};toast(T[n]?"Conquista desbloqueada: "+T[n]+"!":"Receita marcada como feita!")}const y=scrollY;draw();scrollTo(0,y)};$("#fav").onclick=()=>{const l=favs();st.set(uk("fav"),fv?l.filter(x=>x!=fk):[...l,fk]);const y=scrollY;draw();scrollTo(0,y)};
    document.querySelectorAll(".ing input").forEach(c=>c.onchange=()=>{const x=+c.dataset.i,l=st.get(ck,[]);st.set(ck,c.checked?[...l,x]:l.filter(v=>v!=x));c.closest(".ing").classList.toggle("done",c.checked)});
    $("#pv").onclick=()=>{step--;const y=scrollY;draw();scrollTo(0,y)};$("#nx").onclick=()=>{step++;const y=scrollY;draw();scrollTo(0,y)}})};draw()}
 
@@ -145,7 +170,7 @@ function bonusView(id,bk="#/bonus"){const b=(bk=="#/bonus"?D.bonus:D.guides).fin
 /* ---------- Exclusivos ---------- */
 function excl(id){
  const m=getM(id);
- if(!m||m.free)return page(`${back("#/","Início")}<h1>Produtos exclusivos</h1><p class="mut">Toque em um produto e digite o seu código para liberar o acesso.</p>
+ if(!m||m.free)return page(`${back("#/","Início")}<h1>Produtos exclusivos</h1><p class="mut">Toque em um produto e digite o seu código para liberar o acesso.</p>${(()=>{const P=prog();return `<div class="pl"><span>Produtos liberados</span><b>${P.gex} de ${P.nex}</b></div><div class="pb"><i style="width:${Math.round(P.gex/P.nex*100)}%"></i></div>`})()}
  ${C.modules.filter(x=>!x.free).map(xcard).join("")}
  <a class="btn sec" href="#/ofertas" style="margin-top:12px">Ver ofertas adicionais</a>`,"excl");
  const ok=unl().includes(id);
@@ -157,7 +182,7 @@ function excl(id){
    if(!c)return er.textContent="Digite o código de acesso.";
    if(!m.hash)return er.textContent="Este produto ainda não está disponível para desbloqueio.";
    if(await sha(c)!==m.hash)return er.textContent="Código incorreto. Confira o código recebido na compra e tente de novo.";
-   st.set(uk("unl"),[...unl(),m.id]);toast("Produto desbloqueado!");excl(id)}})}
+   st.set(uk("unl"),[...unl(),m.id]);toast(prog().next?"Produto desbloqueado! Sua coleção está em "+prog().pct+"%.":"Conquista desbloqueada: Coleção completa!");excl(id)}})}
 
 /* ---------- Ofertas ---------- */
 const offers=()=>page(`${back("#/exclusivos")}<h1>Ofertas adicionais</h1><p class="mut">Estas ofertas são separadas dos 3 bônus incluídos.</p>

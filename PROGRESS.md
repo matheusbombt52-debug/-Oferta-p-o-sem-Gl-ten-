@@ -110,3 +110,27 @@ Próximo: pizzas (módulo exclusivo).
 - Com `demo:false` e o Supabase vazio, o app mostrava só "O acesso está sendo preparado" e ninguém conseguia entrar. Agora `CONFIG.demo` está `true` em data.js: qualquer e-mail válido e senha de 6+ caracteres entram (login simulado, guardado só no navegador de cada pessoa). Os produtos exclusivos continuam bloqueados e só abrem com os códigos.
 - Importante antes de vender: com `demo:true` quem tiver o link entra e vê pães e bônus sem pagar. Para uso real, preencher `CONFIG.supabase` e voltar para `demo:false`.
 - Arquivos: data.js, README.md, PROGRESS.md.
+
+## Home profissional, progresso e interatividade
+- Home refeita: logo pequena e avatar com a inicial do nome, cartão de boas-vindas com anel de progresso, cartão "Continue de onde parou" (última receita aberta), cartão "Sua jornada" com duas barras animadas (materiais liberados e receitas feitas), "Próximo desbloqueio" com o selo de desconto e 4 conquistas (primeira receita, 5, 10 e coleção completa).
+- Progresso da coleção: pães + 3 bônus + 4 exclusivos = 8 materiais (começa em 50%); cada produto liberado sobe a barra e o aviso ao liberar mostra a nova porcentagem. A tela Exclusivos também ganhou a barra "Produtos liberados".
+- Receitas: novo botão "Marcar como feita" (alimenta a barra de receitas e as conquistas). Dados guardados no navegador de cada pessoa (`done`, `last`).
+- Emojis da barra inferior e do avatar trocados por ícones desenhados (index.html, style.css).
+- Arquivos alterados: app.js, index.html, style.css, PROGRESS.md.
+
+## Imagem no cartão Sua jornada
+- Foto de mãos sovando massa (img/jornada.jpg, recortada em 2:1) como cabeçalho do cartão "Sua jornada". A foto de pães sobre mesa de madeira enviada junto NÃO foi usada: mostra espigas de trigo, croissants e massas folhadas, que contêm glúten e contradizem a proposta do app.
+- Pendente: 4 medalhas das conquistas (geradas externamente) e imagens das categorias de receita.
+- Arquivos: img/jornada.jpg, app.js, style.css, PROGRESS.md.
+
+## Medalhas das conquistas
+- As 4 medalhas ilustradas (geradas externamente) substituem os ícones: img/medalha-primeira.png (panela com pão), medalha-cinco.png (tigela com estrela), medalha-dez.png (troféu com milho e oliveira), medalha-colecao.png (livros com coroa). Fundo transparente, 220 px, cerca de 60 KB cada.
+- Bloqueadas aparecem em cinza e esmaecidas (filtro CSS); ao conquistar, ganham cor e sombra. Aviso "Conquista desbloqueada" ao marcar a 1ª, 5ª e 10ª receita feita e ao liberar o último produto exclusivo.
+- Arquivos: img/ (4 novos), app.js, style.css, PROGRESS.md.
+
+## Carrossel de banners e card de oferta
+- Banners (img/banner-pizzas|bolos|salgados|guia.jpg, 1200x214, ~60 KB cada), criados com textos pelo ChatGPT e recortados em faixa fina 5,6:1. Os textos foram conferidos: nomes, acentos, "De R$ 7,90 por R$ 5,90", "25% OFF" e "Ver oferta". Se o preço mudar, os banners precisam ser gerados de novo (o preço está dentro da imagem).
+- Carrossel na Home (logo abaixo do cartão de boas-vindas): mostra só os exclusivos que a pessoa ainda não liberou e some quando todos estão liberados. Desliza com o dedo, passa sozinho a cada 5 s (pausa ao tocar e respeita "reduzir movimento"), tem bolinhas de posição e cada banner leva ao produto. O bloco "Próximo desbloqueio" da jornada só aparece se o carrossel não existir (evita repetição). Campo `banner` de cada módulo em data.js.
+- Card de oferta: aparece uma única vez, depois de 8 minutos de uso ativo (conta só com a tela aberta e visível), listando apenas os exclusivos ainda não liberados com o selo de desconto e link para cada um. Se a pessoa já liberou tudo, não aparece. Tempo configurável em `CONFIG.promoSeconds` (data.js, 480 s).
+- Limite: o controle "uma vez" fica no navegador de cada aparelho. Se a pessoa limpar os dados ou entrar por outro aparelho/navegador, pode ver de novo. Para controle real, guardar no servidor (Supabase).
+- Arquivos: img/ (4 banners), data.js, app.js, style.css, PROGRESS.md.

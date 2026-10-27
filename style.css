@@ -84,3 +84,46 @@ ul.g{padding-left:20px}ul.g li{margin:4px 0}
 .dchip{position:absolute;top:6px;left:6px;z-index:2;display:inline-block;min-height:0;width:auto;height:auto;border:0;background:var(--terra);color:#fff;font:800 .68rem/1.25 Nunito,sans-serif;letter-spacing:.02em;padding:2px 7px;border-radius:99px;box-shadow:0 2px 6px rgba(0,0,0,.3);pointer-events:none}
 .promo{margin-top:8px}.btn.buy{white-space:nowrap}
 .tile .tn{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;margin-bottom:8px}
+
+/* ---- Home profissional + progresso ---- */
+@property --p{syntax:"<number>";inherits:false;initial-value:0}
+#nav a i svg{width:24px;height:24px;display:block;margin:0 auto 2px}#nav a i{font-size:0}
+.top2{display:flex;justify-content:space-between;align-items:center;margin:2px 0 12px}.lgs{height:38px;width:auto;display:block}
+.av{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--brown);color:#fff;font:800 1.05rem Nunito,sans-serif;text-decoration:none}
+.hero{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:20px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#3E2518 0%,#7A3B20 60%,#C2552F 130%);box-shadow:0 8px 22px rgba(62,37,24,.28)}
+.hero h1{margin:2px 0 6px;color:#fff;font-size:1.7rem}.hero-k{margin:0;font:800 .7rem Nunito,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#F2C9A8}.hero-s{margin:0;font-size:.92rem;line-height:1.4;color:#F6E7D8}
+.ring{--p:0;flex:none;position:relative;width:82px;height:82px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#F2B56B calc(var(--p)*1%),rgba(255,255,255,.2) 0);transition:--p 1.2s cubic-bezier(.2,.8,.2,1)}
+.ring:before{content:"";position:absolute;inset:8px;border-radius:50%;background:#5A2F1B}.ring b{position:relative;font:800 1.15rem Nunito,sans-serif}
+.cont{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 0;padding:14px 16px;background:#fff;border-radius:16px;border-left:5px solid var(--olive);box-shadow:0 2px 8px rgba(62,37,24,.08);text-decoration:none;color:var(--brown)}
+.cont span:first-child,.nxt span:first-child{display:flex;flex-direction:column;gap:2px;min-width:0}.cont small,.nxt small{color:var(--mut);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}.cont b,.nxt b{font-size:1rem;line-height:1.25}
+.jc{margin-top:14px;padding:18px}.jc h2{margin:0 0 12px}
+.pl{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 6px;font-size:.88rem;color:var(--mut);font-weight:700}.pl b{color:var(--brown)}
+.pb{height:10px;border-radius:99px;background:var(--line);overflow:hidden}.pb i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--olive),#9DB04F);transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.nxt{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding:12px 14px;border-radius:14px;background:#FFF4E2;border:1.5px dashed #E5B77E;text-decoration:none;color:var(--brown)}
+.nxo{flex:none;background:var(--terra);color:#fff;font:800 .78rem Nunito,sans-serif;padding:5px 11px;border-radius:99px}
+.bh{margin:18px 0 8px;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+.bds{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.bd{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.bd span{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--line);color:#B7A594}.bd small{font-size:.66rem;line-height:1.2;color:var(--mut);font-weight:700}
+.bd.on span{background:linear-gradient(135deg,#F2B56B,#C2552F);color:#fff;box-shadow:0 3px 10px rgba(194,85,47,.35)}.bd.on small{color:var(--brown)}
+@media(min-width:700px){.hero{padding:26px}.hero h1{font-size:2rem}}
+.jc{padding:0;overflow:hidden}.jb{padding:4px 18px 18px}
+.jh{position:relative;height:118px;overflow:hidden}.jh img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.jh:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(36,22,14,.78),rgba(36,22,14,.12) 70%)}
+.jht{position:absolute;left:18px;right:18px;bottom:12px;z-index:1;color:#fff}.jc .jht h2{margin:0;color:#fff;font-size:1.3rem}.jht small{color:#F6E7D8;font-weight:700}
+.bd img{display:block;width:68px;height:68px;object-fit:contain;filter:grayscale(1) opacity(.42);transition:filter .5s,transform .5s}
+.bd.on img{filter:drop-shadow(0 4px 6px rgba(62,37,24,.3));transform:scale(1.04)}
+.bd span{display:none}
+
+/* ---- Carrossel de ofertas ---- */
+.car{margin:14px 0 0}.car-t{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:16px;scrollbar-width:none;box-shadow:0 4px 14px rgba(62,37,24,.18);-webkit-overflow-scrolling:touch}.car-t::-webkit-scrollbar{display:none}
+.car-s{flex:0 0 100%;scroll-snap-align:start;display:block;line-height:0}.car-s img{display:block;width:100%;height:auto;aspect-ratio:5.6/1}
+.car-d{display:flex;justify-content:center;gap:6px;margin-top:8px}.car-d i{width:7px;height:7px;border-radius:99px;background:#D9C7B0;cursor:pointer;transition:all .25s}.car-d i.on{width:20px;background:var(--terra)}
+/* ---- Card de oferta (uma vez) ---- */
+#promo{position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;z-index:60;background:#fff;border-radius:18px;padding:16px 16px 8px;border:1.5px solid #F0D3A4;box-shadow:0 12px 36px rgba(36,22,14,.38);animation:pup .45s cubic-bezier(.2,.9,.3,1.15)}
+@keyframes pup{from{transform:translateY(28px);opacity:0}to{transform:none;opacity:1}}
+#promo .px{position:absolute;top:6px;right:8px;min-width:40px;min-height:40px;border:0;background:none;font-size:1.6rem;line-height:1;color:var(--mut);cursor:pointer}
+#promo .pk{margin:0;color:var(--terra-d);font:800 .72rem Nunito,sans-serif;text-transform:uppercase;letter-spacing:.08em}
+#promo h3{margin:2px 0 2px;font-size:1.2rem;color:var(--brown)}#promo .ps{margin:0 0 6px;color:var(--mut);font-size:.86rem}
+#promo a.pi{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;padding:12px;border-radius:12px;background:#FFF4E2;border:1px solid #F0D3A4;text-decoration:none;color:var(--brown);font-weight:800;font-size:.92rem}
+#promo a.pi b{flex:none;background:var(--terra);color:#fff;font:800 .74rem Nunito,sans-serif;padding:4px 10px;border-radius:99px}
+#promo .pn{display:block;width:100%;margin-top:4px;border:0;background:none;color:var(--mut);font:700 .85rem Nunito,sans-serif;min-height:42px;cursor:pointer}
